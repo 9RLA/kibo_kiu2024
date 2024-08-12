@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>글자수 세기</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .container {
+            width: 500px;
+        }
+        #target {
+            color: gray;
+            background-color: black;
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            resize: none; /* 사용자가 직접 크기를 조절하지 못하게 설정 */
+            overflow: hidden; /* 스크롤바를 감추기 위해 설정 */
+            min-height: 100px; /* 최소 높이 설정 */
+        }
+        .countContainer {
+            margin-top: 5px;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .resetBtn {
+            color: blue;
+            cursor: pointer;
+            padding: 5px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        .countText {
+            color: gray;
+        }
+    </style>
+</head>
+<body>
+    <h2>아래에 글자를 입력하세요</h2>
+    <div class="container">
+        <textarea id="target" rows="10" placeholder="여기에 글자를 입력하세요"></textarea>
+        <div class="countContainer">
+            <span class="resetBtn">[초기화]</span>
+            <div class="countText">
+                공백 포함: <span class="textCountWithSpaces">0자</span> / 
+                공백 제외: <span class="textCountWithoutSpaces">0자</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    function adjustHeight() {
+        var textArea = $('#target');
+        textArea.height('auto'); // 높이를 초기화하여 정확한 높이 계산이 가능하게 함
+        textArea.height(textArea.prop('scrollHeight')); // 내용에 따라 높이 조정
+    }
+
+    function updateCounts() {
+        let content = $('#target').val();
+        
+        // 공백 포함 글자수 세기
+        let countWithSpaces = content.length;
+        
+        // 공백 제외 글자수 세기
+        let countWithoutSpaces = content.replace(/\s/g, '').length;
+
+        // 글자수 업데이트
+        $('.textCountWithSpaces').text(countWithSpaces + '자');
+        $('.textCountWithoutSpaces').text(countWithoutSpaces + '자');
+    }
+
+    $('#target').on('input', function () {
+        updateCounts();
+        adjustHeight(); // textarea 높이 조절
+    });
+
+    // 초기화 버튼 클릭 이벤트
+    $('.resetBtn').click(function () {
+        $('#target').val(''); // 텍스트 내용 삭제
+        updateCounts(); // 글자수 초기화
+        adjustHeight(); // 높이 초기화
+    });
+
+    // 페이지 로드 시 초기 높이 및 글자수 조절
+    adjustHeight();
+    updateCounts();
+    </script>
+</body>
+</html>
